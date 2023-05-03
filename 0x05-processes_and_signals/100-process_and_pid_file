@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#Creates file, displays To infinity and beyond
+#Displays I hate kill command on Sigterm signal
+#Displays Y U not love me on Sigint signal
+#Deletes the file it created and terminates on rceiving
+#Sigquit or sigterm sign
+terminator() {
+  rm /var/run/myscript.pid
+  exit
+}
+
+echo "$$" > /var/run/myscript.pid
+
+while true
+do
+  echo "To infinity and beyond"
+  sleep 2
+  trap 'echo "Y U no love me?!"' SIGINT
+  trap 'echo "I hate the kill command" && terminator' SIGTERM
+  trap 'terminator' SIGQUIT
+done
