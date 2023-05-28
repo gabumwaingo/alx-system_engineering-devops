@@ -1,0 +1,66 @@
+                                      +---------------------------+
+                                      |         User's Device      |
+                                      +--------------+------------+
+                                                     |
+                                                     | HTTP Request
+                                                     |
+                                      +--------------v------------+
+                                      |       DNS Resolution       |
+                                      +--------------+------------+
+                                                     |
+                                                     | Resolves www.foobar.com to server IP
+                                                     |
+                                      +--------------v------------+
+                                      |       Load Balancer        |
+                                      +--------------+------------+
+                                                     |
+                                                     | Distributes requests using Round Robin algorithm
+                                                     |
+                       +-----------------------------+-----------------------------+
+                       |                             |                             |
+                       |                             |                             |
+          +------------v------------+   +------------v------------+   +------------v------------+
+          |      Web Server         |   |     Web Server          |   |    Application Server   |
+          |        (Nginx)         |   |       (Nginx)          |   |                         |
+          +------------+------------+   +------------+------------+   +------------+------------+
+                       |                             |                             |
+                       |                             |                             |
+          +------------v------------+   +------------v------------+
+          |        Database         |   |        Database         |
+          |        (MySQL)          |   |        (MySQL)          |
+          |     Primary Node        |   |     Replica Node        |
+          +-------------------------+   +-------------------------+
+
+Explanation:
+
+Additional Elements and their Purpose:
+- Two servers: To ensure redundancy and high availability in case one server fails.
+- Load Balancer (HAproxy): To evenly distribute incoming requests across multiple web servers, improving scalability and handling high traffic loads.
+- Primary-Replica (Master-Slave) Database Cluster: To provide fault tolerance and data replication for better data availability and reliability.
+
+Load Balancer Configuration:
+- The load balancer is configured with the Round Robin algorithm.
+- The Round Robin algorithm evenly distributes incoming requests to each web server in a sequential manner.
+
+Active-Active vs. Active-Passive Setup:
+- The infrastructure is configured with an Active-Active setup.
+- In an Active-Active setup, both web servers are actively serving requests simultaneously, improving performance and scalability.
+- In contrast, an Active-Passive setup would involve one web server actively serving requests while the other acts as a backup, remaining idle until failover is required.
+
+Primary-Replica (Master-Slave) Database Cluster:
+- The Primary-Replica cluster consists of a Primary Node and a Replica Node.
+- The Primary Node handles read and write operations, serving as the main database server.
+- The Replica Node replicates data from the Primary Node and serves as a backup.
+- The Replica Node can be used for failover purposes if the Primary Node fails, ensuring data availability.
+
+Issues with this infrastructure:
+- Single Point of Failure (SPOF):
+  - Despite having multiple servers, certain components like the load balancer or database cluster may still be SPOFs if they are not properly configured or redundant.
+- Security Issues:
+  - The infrastructure lacks a firewall, which can expose it to potential security threats.
+  - HTTPS (SSL/TLS) is not implemented, leading to insecure data transmission.
+- No Monitoring:
+  - The infrastructure lacks monitoring tools to track server performance, detect issues, and ensure proactive maintenance.
+
+To address these issues, you could consider implementing firewall rules, enabling HTTPS using SSL/TLS certificates, and incorporating monitoring tools to ensure the health and security of the infrastructure.
+
