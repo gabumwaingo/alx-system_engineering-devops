@@ -1,0 +1,81 @@
+                     ┌───────────────────────────────┐
+                     │           Firewall 1          │
+                     └───────────────────────────────┘
+                                   │
+                                   │
+                     ┌───────────────────────────────┐
+                     │           Firewall 2          │
+                     └───────────────────────────────┘
+                                   │
+                                   │
+                     ┌───────────────────────────────┐
+                     │           Firewall 3          │
+                     └───────────────────────────────┘
+                                   │
+                                   │
+    ┌──────────────────────────────────────────────────────────┐
+    │                         Load Balancer                   │
+    │       (HAproxy - SSL termination & Load Distribution)    │
+    └──────────────────────────────────────────────────────────┘
+                                   │
+                                   │
+    ┌──────────────────────────────────────────────────────────┐
+    │                    Web Server (Nginx)                    │
+    └──────────────────────────────────────────────────────────┘
+                                   │
+                                   │
+    ┌──────────────────────────────────────────────────────────┐
+    │                  Application Server                     │
+    └──────────────────────────────────────────────────────────┘
+                                   │
+                                   │
+    ┌──────────────────────────────────────────────────────────┐
+    │                      Database (MySQL)                    │
+    └──────────────────────────────────────────────────────────┘
+
+
+Designing a Three-Server Web Infrastructure for www.foobar.com
+
+Additional Elements and their Purpose:
+- 3 Firewalls: Firewalls are added to enhance security by filtering incoming and outgoing network traffic, enforcing access control policies, and protecting against unauthorized access or malicious activities.
+- SSL Certificate for HTTPS: An SSL certificate is added to enable secure communication over HTTPS (Hypertext Transfer Protocol Secure) protocol. It encrypts the data transmitted between the web server and clients, ensuring data confidentiality and integrity.
+- 3 Monitoring Clients: Monitoring clients, such as data collectors for Sumo Logic or other monitoring services, are included to monitor the health, performance, and security of the infrastructure.
+
+Firewalls:
+- Firewalls are essential components for network security.
+- They act as barriers between the internal network and external threats.
+- Firewalls enforce access control policies, filter network traffic, and protect against unauthorized access or malicious activities.
+
+HTTPS:
+- Traffic is served over HTTPS to provide secure communication between clients and the web server.
+- HTTPS encrypts the data transmitted using SSL/TLS protocols, ensuring confidentiality and integrity.
+- It protects sensitive information from eavesdropping, tampering, and man-in-the-middle attacks.
+
+Monitoring:
+- Monitoring is used to ensure the health, performance, and security of the web infrastructure.
+- Monitoring tools collect and analyze data from various components, including servers, network devices, and applications.
+- It helps identify issues, track performance metrics, detect anomalies, and enable proactive maintenance.
+
+Data Collection for Monitoring:
+- Monitoring tools collect data through monitoring clients or data collectors.
+- These clients gather relevant information such as server metrics, logs, and network data.
+- The collected data is then processed and analyzed to generate insights, alerts, and reports.
+
+Monitoring Web Server QPS:
+- To monitor the web server's QPS (Queries Per Second):
+  1. Set up monitoring tools to collect relevant metrics, including request count or throughput.
+  2. Configure alerts or thresholds to trigger notifications when QPS exceeds desired levels.
+  3. Monitor and analyze the data regularly to identify performance trends and make informed decisions.
+
+Issues with the Infrastructure:
+- Terminating SSL at the Load Balancer Level:
+  - Terminating SSL at the load balancer level can be an issue as it adds extra load on the load balancer and reduces scalability.
+  - Each SSL handshake requires computational resources, which may limit the number of concurrent SSL connections the load balancer can handle.
+- Single MySQL Server Capable of Accepting Writes:
+  - Having only one MySQL server capable of accepting writes creates a single point of failure.
+  - If the MySQL server fails, it can result in downtime and data unavailability.
+- Servers with All the Same Components (Database, Web Server, Application Server):
+  - Having servers with all the same components can be problematic as it lacks redundancy and fails to provide fault tolerance.
+  - If any component fails, it affects the entire server's functionality, leading to potential downtime and degraded performance.
+
+To address these issues, consider implementing SSL termination closer to the web servers, using a load balancer with SSL offloading capabilities. Implementing database replication and clustering can ensure high availability and fault tolerance. Additionally, incorporating server redundancy and load balancing across multiple servers can enhance scalability and fault tolerance.
