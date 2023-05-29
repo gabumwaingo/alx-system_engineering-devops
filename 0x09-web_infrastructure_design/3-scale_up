@@ -1,0 +1,36 @@
+                     ┌───────────────────────┐         ┌───────────────────────┐
+                     │        Firewall       │         │        Firewall       │
+                     └───────────────────────┘         └───────────────────────┘
+                                   │                                │
+                                   │                                │
+                     ┌───────────────────────┐         ┌───────────────────────┐
+                     │     Load Balancer    │         │     Load Balancer    │
+                     └───────────────────────┘         └───────────────────────┘
+                                   │                                │
+                                   │                                │
+                     ┌───────────────────────┐         ┌───────────────────────┐
+                     │     Web Server 1     │         │     Web Server 2     │
+                     └───────────────────────┘         └───────────────────────┘
+                                   │                                │
+                                   │                                │
+                     ┌───────────────────────┐         ┌───────────────────────┐
+                     │   App Server 1      │         │   App Server 2      │
+                     └───────────────────────┘         └───────────────────────┘
+                                   │                                │
+                                   │                                │
+                     ┌───────────────────────┐         ┌───────────────────────┐
+                     │  Database Server 1   │         │  Database Server 2   │
+                     └───────────────────────┘         └───────────────────────┘
+
+There are two firewalls positioned at the top of the diagram. Firewalls provide network security by monitoring and controlling incoming and outgoing traffic. They act as a barrier between the external network and the internal servers, ensuring that only authorized traffic is allowed.
+
+Below the firewalls, there are two load balancers. Load balancers distribute incoming traffic evenly across multiple web servers, ensuring efficient utilization of resources and improved performance.
+
+The next level consists of two web servers. Web servers handle incoming requests from users, process them, and generate responses to be sent back.
+
+Below the web servers, there are two application servers. Application servers execute the logic and business processes of the web application, handling tasks such as authentication, data processing, and integration with other systems.
+
+At the bottom level, there are two database servers. Database servers store and manage the application's data, providing efficient and reliable data storage and retrieval.
+
+By separating the components onto their own servers, we improve performance, scalability, and isolation. The load balancers enable traffic distribution, ensuring high availability and fault tolerance. The firewall protects the infrastructure from unauthorized access and potential security threats. Each server plays a specific role in the overall web infrastructure, working together to provide a reliable, secure, and scalable environment for hosting the website.
+
