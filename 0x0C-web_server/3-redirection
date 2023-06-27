@@ -1,31 +1,20 @@
-#!/pusr/bin/env bash
+#!/usr/bin/env bash
+#Redirecting a 301 permanently moved
 
-# Update the system
-sudo apt-get update
+apt-get update
+apt-get install -y nginx
 
-# Install Nginx
-sudo apt-get install -y nginx
-
-# Configure the redirection
-sudo echo "server {
+mkdir /etc/nginx/html
+touch /etc/nginx/html/index.html
+echo "Hello Word!" > /etc/nginx/html/index.html
+printf %s "server {
     listen 80;
-    server_name _;
-
+    listen [::]:80 default_server;
+    root   /etc/nginx/html;
+    index  index.html index.htm;
     location /redirect_me {
-        return 301 http://example.com/new-page;
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
     }
+}" > /etc/nginx/sites-available/default
 
-    location / {
-        root /var/www/html;
-        index index.html index.htm;
-    }
-}" | sudo tee /etc/nginx/sites-available/redirect
-
-# Enable the redirection site
-sudo ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
-
-# Remove default Nginx configuration
-sudo rm /etc/nginx/sites-enabled/default
-
-# Restart Nginx
-sudo service nginx restart
+service nginx restart
