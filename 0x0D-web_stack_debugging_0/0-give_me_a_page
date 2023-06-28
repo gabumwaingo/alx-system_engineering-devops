@@ -1,20 +1,5 @@
+#!/usr/bin/env bash
 #Connect to the docker container
-docker exec -it <container_id> /bin/bash
-
-#Navigate to the apache config directory
-cd /etc/apache2/sites-available
-
-#Open apache default config file in a text editor
-nano 000-default.conf
-
-#Look for virtual host and ensure it is listening to port 80
-<VirtualHost *:80>
-
-#Set document root directory in virtual host block
-DocumentRoot /var/www/html
-
-#Save changes and exit text editor then restart apache
-service apache2 restart
-
-#Exit container
-exit
+#debugging apache config file so that it may display Hello Holberton
+echo "ServerName localhost" >> /etc/apache2.conf
+service apache2 start
