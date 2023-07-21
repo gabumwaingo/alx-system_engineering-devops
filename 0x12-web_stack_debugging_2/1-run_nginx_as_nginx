@@ -1,35 +1,29 @@
 #!/usr/bin/env bash
 # script to configure broken container to work with nginx at port 8080
 
-# kill apache2 instances (running on 8080 on this server)
-service apache2 stop
-pkill apache2
+sed -i 's/^user .*/user nginx;/g' /etc/nginx/nginx.conf
 
-# configure nginx to run on port 8080
-CONFIG_LOCATION='/etc/nginx/sites-available/default'
-CONFIG="
+# Check if port 8080 is already in use
+if nc -z -v -w5 0.0.0.0 8080; then
+    echo "Port 8080 is already in use. Exiting."
+    exit 1
+fi
+
+# Update nginx configuration for port 8080 and all active IPs
+cat << EOF > /etc/nginx/sites-available/default
 server {
-	listen 8080 default_server;
-	listen [::]:8080 default_server ipv6only=on;
+    listen 8080 default_server;
+    listen [::]:8080 default_server;
 
-	root /usr/share/nginx/html;
-	index index.html index.htm;
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+}
+EOF
 
-	# Make site accessible from http://localhost/
-	server_name localhost;
+# Create a symbolic link to enable the configuration
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
-	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
-		try_files $uri $uri/ =404;
-		# Uncomment to enable naxsi on this location
-		# include /etc/nginx/naxsi.rules
-	}
-}"
-printf "%s" "$CONFIG" > "$CONFIG_LOCATION"
-
-chown nginx /etc/nginx/nginx.conf
-sudo -u nginx chmod u+r /etc/nginx/nginx.conf
-
-# restart nginx as nginx user
-sudo -u nginx service nginx restart
+# Restart nginx to apply changes
+service nginx restart
