@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # script to configure broken container to work with nginx at port 8080
 # run nginx as nginx user
-wget -O do_fix https://raw.githubusercontent.com/BennettDixon/holberton-system_engineering-devops/master/0x12-web_stack_debugging_2/100-backer
-chmod u+x do_fix
-./do_fix
+[ $EUID -ne 0 ] && echo "This script must be run as root." && exit 1
+sed -i 's/^user .*/user nginx/' /etc/nginx/nginx.conf
+nc -z -v -w5 0.0.0.0 8080 || exit 1
+rm /etc/nginx/sites-available/default
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+service nginx restart
