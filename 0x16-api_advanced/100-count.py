@@ -32,7 +32,7 @@ def count_words(subreddit, word_list, after=None, keyword_count={}):
             else:
                 sorted_keywords = sorted(keyword_count.items(), key=lambda x: (-x[1], x[0]))
                 for keyword, count in sorted_keywords:
-                    print(f"{keyword}: {count}")
+                    print("{}: {}".format(keyword, count))
         else:
             print("No results found.")
     else:
