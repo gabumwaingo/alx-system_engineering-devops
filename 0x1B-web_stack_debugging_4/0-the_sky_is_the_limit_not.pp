@@ -1,17 +1,11 @@
-class apache_traffic_increase {
-  package { 'apache2':
-    ensure => installed,
-  }
+#Increases the traffic on an nginx server
+exec { 'fix--for-nginx':
+  command => 'sed -i "s/15/4096/" /etc/default/nginx',
+  path    => '/usr/local/bin/:/bin/'
+} ->
 
-  service { 'apache2':
-    ensure => running,
-    enable => true,
-    require => Package['apache2'],
-  }
-
-  file { '/etc/apache2/sites-available/default':
-    content => "MaxClients 150\n", # Adjust the value as needed
-    notify => Service['apache2'],
-  }
+# Restart Nginx
+exec { 'nginx-restart':
+  command => 'nginx restart',
+  path    => '/etc/init.d/'
 }
-
