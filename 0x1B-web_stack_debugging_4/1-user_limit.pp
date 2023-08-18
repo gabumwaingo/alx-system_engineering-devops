@@ -1,30 +1,12 @@
-# Define class for holberton user setup
-class holberton_user_setup {
-  
-  # Create holberton user
-  user { 'holberton':
-    ensure => present,
-    home   => '/home/holberton',
-    shell  => '/bin/bash',
-  }
+# Enabling holberton touser to login and edit files without error
 
-  # Set password for holberton user
-  exec { 'set-holberton-password':
-    command => 'passwd holberton',
-    unless  => 'grep -q "^holberton:" /etc/passwd',
-  }
+exec { 'increase-hard-file-limit-for-holberton-user':
+  command => 'sed -i "/holberton hard/s/5/50000/" /etc/security/limits.conf',
+  path    => '/usr/local/bin/:/bin/'
+}
 
-  # Allow SSH access for holberton user
-  file { '/etc/ssh/sshd_config':
-    content => "AllowUsers holberton",
-    notify  => Service['ssh'],
-  }
-
-  # Change ownership and permissions of files
-  file { '/path/to/files':
-    owner   => 'holberton',
-    group   => 'holberton',
-    recurse => true,
-    mode    => '755',
-  }
+# Increase soft file limit for Holberton user.
+exec { 'increase-soft-file-limit-for-holberton-user':
+  command => 'sed -i "/holberton soft/s/4/50000/" /etc/security/limits.conf',
+  path    => '/usr/local/bin/:/bin/'
 }
