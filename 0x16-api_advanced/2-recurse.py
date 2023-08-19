@@ -4,15 +4,16 @@ and returns titles of hot articles"""
 
 import requests
 
+
 def recurse(subreddit, hot_list=[], after=None):
     headers = {'User-Agent': 'MyRedditBot/1.0'}
-    
+
     url = 'https://www.reddit.com/r/' + subreddit + '/hot.json'
-    
+
     params = {'limit': 100, 'after': after}
-    
+
     response = requests.get(url, headers=headers, params=params)
-    
+
     if response.status_code == 200:
         data = response.json()
         if 'data' in data and 'children' in data['data']:

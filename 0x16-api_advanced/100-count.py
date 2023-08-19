@@ -4,15 +4,16 @@
 
 import requests
 
+
 def count_words(subreddit, word_list, after=None, keyword_count={}):
     headers = {'User-Agent': 'MyRedditBot/1.0'}
-    
+
     url = 'https://www.reddit.com/r/' + subreddit + '/hot.json'
-    
+
     params = {'limit': 100, 'after': after}
-    
-    response = requests.get(url, headers=headers, params=params)
-    
+
+    response = requests.get(url, headers=headers, params=params
+
     if response.status_code == 200:
         data = response.json()
         if 'data' in data and 'children' in data['data']:
@@ -30,7 +31,8 @@ def count_words(subreddit, word_list, after=None, keyword_count={}):
             if new_after is not None:
                 count_words(subreddit, word_list, new_after, keyword_count)
             else:
-                sorted_keywords = sorted(keyword_count.items(), key=lambda x: (-x[1], x[0]))
+                sorted_keywords = sorted(keyword_count.items(),
+                                         key=lambda x: (-x[1], x[0]))
                 for keyword, count in sorted_keywords:
                     print("{}: {}".format(keyword, count))
         else:
